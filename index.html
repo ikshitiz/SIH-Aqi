@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
+		<script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+
+		<script type='text/javascript' src='https://code.jquery.com/jquery-2.1.0.js'></script>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+		
+		<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+		<script type='text/javascript' src='https://code.jquery.com/jquery-2.1.0.js'></script>
+			
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet"  href="css/cards_style.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+		<style >
+			.infoIcon2{
+				display: none;
+			}
+			.detailbtn9,.detailbtn8,.detailbtn7,.detailbtn6,.detailbtn5,.detailbtn4,.detailbtn3,.detailbtn2,.detailbtn1{
+				left:50%;
+				top:100%;
+				transform: translate(-50%,-50%);
+				width:rem(145px);
+				height:rem(38px);
+				z-index: 2;
+				overflow: hidden;
+				transition: all ease 0.35s; 
+			}
+			.detailbtn9[aria-expanded="true"],.detailbtn8[aria-expanded="true"],.detailbtn7[aria-expanded="true"],.detailbtn6[aria-expanded="true"],.detailbtn5[aria-expanded="true"],.detailbtn4[aria-expanded="true"],.detailbtn3[aria-expanded="true"],.detailbtn2[aria-expanded="true"],.detailbtn1[aria-expanded="true"]{
+					left: 90%;
+					transform: translate(-90%,-50%);
+					width:rem(52px);
+					height:rem(52px);
+			}
+			.detailbtn9[aria-expanded="true"] .infoIcon,.detailbtn8[aria-expanded="true"] .infoIcon,.detailbtn7[aria-expanded="true"] .infoIcon,.detailbtn6[aria-expanded="true"] .infoIcon,.detailbtn5[aria-expanded="true"] .infoIcon,.detailbtn4[aria-expanded="true"] .infoIcon,.detailbtn3[aria-expanded="true"] .infoIcon,.detailbtn2[aria-expanded="true"] .infoIcon,.detailbtn1[aria-expanded="true"] .infoIcon{
+				display: none;
+			}
+			.detailbtn9[aria-expanded="true"] .infoIcon2,.detailbtn8[aria-expanded="true"] .infoIcon2,.detailbtn7[aria-expanded="true"] .infoIcon2,.detailbtn6[aria-expanded="true"] .infoIcon2,.detailbtn5[aria-expanded="true"] .infoIcon2,.detailbtn4[aria-expanded="true"] .infoIcon2,.detailbtn3[aria-expanded="true"] .infoIcon2,.detailbtn2[aria-expanded="true"] .infoIcon2,.detailbtn1[aria-expanded="true"] .infoIcon2{
+				display: inline-block;
+			}
+			body{
+				background-color: #cce0ff;
+			}
+
+			.cardbg{
+				background-color: #eb3b5e;
+			}
+
+			.cardDarkbg{
+				background-color: #eb3a2e;
+			}
+
+			.btn.bg{
+				background-color: #f9c900;
+			
+			}
+			
+			
+			
+		</style>
+		<title> SIH || AQI Dashboard</title>
+		
+		<script>
+		
+		function dashboard()
+		{
+		   document.getElementById("pane-A").style="display:block";
+		   document.getElementById("pane-B").style="display:none";
+		   document.getElementById("pane-C").style="display:none";
+		}
+		
+		function staticMap()
+		{
+		   document.getElementById("pane-B").style="display:block";
+		   document.getElementById("pane-A").style="display:none";
+		   document.getElementById("pane-C").style="display:none";
+		}
+		
+		function dynamicMap()
+		{
+		   document.getElementById("pane-C").style="display:block";
+		   document.getElementById("pane-A").style="display:none";
+		   document.getElementById("pane-B").style="display:none";
+		}
+		
+		</script>
+		
+		<script src="https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+      <script type="text/javascript">
+      // Load google charts
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Draw the chart and set the chart values
+      function drawChart() {
+				
+        var data = google.visualization.arrayToDataTable([
+        ['Pollution', 'Pollutants'],
+        ['PM 1',38],
+        ['PM 2.5',81],
+        ['Pm 10',101],
+        ['No2',6.51],
+        ['CO2',12.6],
+        ['CO',12.82],
+        ['Humidity',32],
+        ['Temp',45]
+      ]);
+
+        // Optional; add a title and set the width and height of the chart
+        var options = {'title':'Pollution','width':550,'height':400};
+		// Display the chart inside the <div> element with id="piechart"
+        var chart = new google.visualization.ColumnChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+        
+      }
+      </script>
+	  
+	<script type="text/javascript">
+			var config = {
+					apiKey: "AIzaSyCHeMZTxJmJ9pA4nZa6MH4-0Lf0eNAB4ss",
+					authDomain: "aqitest.firebaseapp.com",
+					databaseURL: "https://aqitest.firebaseio.com",
+					projectId: "aqitest",
+					storageBucket: "aqitest.appspot.com",
+					messagingSenderId: "450357954373"
+			};
+			
+			firebase.initializeApp(config);
+			
+			
+	    var map;
+			
+	    function initMap() {
+	      var myLatLng = {lat: 23.564399, lng: 87.346310};
+	      map = new google.maps.Map(document.getElementById('map'), {
+	         zoom: 12,
+	         center: myLatLng
+	      });
+	      setMarkers();
+	    }
+			var contentString;
+
+	    function setMarkers()
+	    {
+				contentString = 'Hi';
+			
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString,
+					maxWidth: 200
+        });
+			
+			var aqifb;
+
+
+			function setit(city, lat, longg)
+			{	
+				var city1 = 'https://aqitest.firebaseio.com/'+city;
+			  var myRef = new Firebase(city1);
+				myRef.on('value', function(snapshot){
+						data = snapshot.val();
+						aqifb = data.AQI;
+						var aqi = aqifb;
+						var qa;
+						if(aqi <= 50)
+						{
+							url1 = 'image/green.png';
+							qa = 'Good';
+						}
+						else if(aqi>50 && aqi<=100)
+						{
+							url1 = 'image/yellow.png';
+							qa = 'Moderate';
+						}
+						else if(aqi > 100 && aqi<=150)
+						{
+							url1 = 'image/orange.png';
+							qa = 'Unsafe for Sensitive';
+						}
+						else if(aqi > 150 && aqi<=200)
+						{
+							url1 = 'image/red.png';
+							qa = 'Unhealthy';
+						}
+						else if(aqi > 200 && aqi<=300)
+						{
+							url1 = 'image/purple.png';
+							qa = 'Very Unhealthy';
+						}
+						else
+						{
+							url1 = 'image/brown.png';
+							qa = 'Hazardous';
+						}
+						
+						
+						var contentString ='<div><h3 id="firstHeading" class="firstHeading">'+city+'</h3>'+
+            '<div id="bodyContent">'+
+            'AQI Level is '+qa+''+
+            '</div></div>';
+						
+						var infowindow = new google.maps.InfoWindow({
+							content: contentString,
+							maxWidth: 200
+						});
+						
+						
+						var textinbox = "AQI : " + aqi;
+						var marker = new google.maps.Marker({
+							position: new google.maps.LatLng(lat, longg),
+							map: map,
+							icon: {url: url1, scaledSize: new google.maps.Size(100, 130), },
+							label: { color: 'black', fontWeight: 'bold', fontSize: '12px', text: textinbox }
+						});
+						marker.addListener('mouseover', function() {
+						infowindow.open(map, marker);
+					});	
+						
+						marker.addListener('mouseout', function() {
+						infowindow.close(map, marker);
+					});	
+				});
+			}
+			setit('BCREC', 23.544399, 87.346310);
+			setit('Fuljhore', 23.53619, 87.33958);
+			setit('Benachity', 23.55690, 87.27688);
+	}
+  	</script>
+	
+	<script  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script  src="js/bootstrap.bundle.min.js"></script>
+		<script type="text/javascript" src="js/card_script.js"></script>
+		<script type="text/javascript">
+		//document.querySelector('st').innerHTML="Offline";
+		function setDashboard(city)
+		{
+		    //document.querySelector('st').innerHTML="Offline";
+			
+				var city1 = 'https://aqitest.firebaseio.com/'+city;
+			  	var myRef = new Firebase(city1);
+				myRef.on('value', function(snapshot){
+							data = snapshot.val();
+
+								if(data!=null)
+								{
+									var aqi = parseInt(data.AQI) - 5;
+									if(aqi <= 50)
+									{
+										qa = 'Good';
+									}
+									else if(aqi>50 && aqi<=100)
+									{
+										qa = 'Moderate';
+									}
+									else if(aqi > 100 && aqi<=150)
+									{
+										qa = 'Unsafe for Sensitive';
+									}
+									else if(aqi > 150 && aqi<=200)
+									{
+										qa = 'Unhealthy';
+									}
+									else if(aqi > 200 && aqi<=300)
+									{
+										qa = 'Very Unhealthy';
+									}
+									else
+									{
+										qa = 'Hazardous';
+									}
+								document.querySelector('aq').innerHTML="       " + qa + " ";		
+								document.querySelector('s1').innerHTML="       " + data.pm1 + " ";
+								document.querySelector('s2').innerHTML="       " + data.pm2 + " ";
+								document.querySelector('s3').innerHTML="       " + data.pm10 + " ";
+								document.querySelector('s4').innerHTML="       " + data.co + " ";
+								document.querySelector('s5').innerHTML="       " + data.co2 + " ";
+								document.querySelector('s6').innerHTML="       " + data.no2 + " ";
+								document.querySelector('s7').innerHTML="       " + data.temp + " ";
+								document.querySelector('s8').innerHTML="       " + data.hum + " ";
+								document.querySelector('s9').innerHTML="       " + data.h2 + " ";
+								document.querySelector('st').innerHTML="Online";
+							}
+							else
+							{
+								document.querySelector('st').innerHTML="Offline";
+							}
+
+					});	
+
+		}
+	    
+		</script>
+		
+		
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  
+  
+	</head>
+	<body>
+		<div class="container">
+			<div class="jumbotron p-3 mt-2">
+				<div class="wrapper d-flex align-items-center">
+					<div>
+						<img class="rounded-circle d-flex p-2" style="width:100px;" src="image/logo.png"> 
+					</div>
+					<div class="h2">
+						Smart India Hackathon || City Real Time AQI Dashboard 
+					</div>
+				</div>
+			</div>
+			<div style="float:right;">   
+                <b><i class="far fa-clock"></i> <clock class="text-success"></clock></b>   
+                    <br> 
+                    <script >
+                        var c = document.querySelector('clock');
+                        var pad = function (x) {
+                                return x < 10 ? '0' + x : x;
+                        }
+
+                        var ShowClock = function () {
+                            var d = new Date();
+                            var h = pad(d.getHours());
+                            var m = pad(d.getMinutes());
+                            var s = pad(d.getSeconds());
+
+                            c.innerHTML = [h, m, s].join(':');
+                        }
+
+                        setInterval(ShowClock, 1000);
+
+                    </script>  
+        	</div>
+		</div>
+		
+		
+		
+		
+		<div class="container">    
+				<ul id="tabs" class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <div id="tab-A" onclick="dashboard()" class="nav-link active" data-toggle="tab" role="tab"><i class="far fa-clipboard"></i> Dashboard</div>
+                    </li>
+                    <li class="nav-item">
+                        <div id="tab-B" onclick="staticMap()" class="nav-link" data-toggle="tab" role="tab"><i class="fas fa-map-marker-alt"></i> Static Map</div>
+                    </li>
+                    <li class="nav-item">
+                        <div id="tab-C" onclick="dynamicMap()" class="nav-link" data-toggle="tab" role="tab"><i class="fas fa-map-marked-alt"></i> Dynamic Map</div>
+                    </li>
+                </ul>
+			<div class="row">
+				<div class="col-md-4">
+					<div style="float: left;"><h3 class="text-info"></br><i class="fas fa-info-circle"></i> Status : <st>Offline</st></h3></br></div>
+				</div>
+				
+				<div class="col-md-4">
+					<div style="float: left;"><h3 class="text-info"></br><i class="fas fa-bullhorn"></i> <font style="color: red">AQI : </font> <font style="color: red"><aq></aq></font></h3></br></div>
+				</div>
+
+				<div class="col-md-4">	
+					<div style="float: right;">
+							</br>
+							<h5><font style="color:white">Select location<font>
+							<select id="Select1" onmousedown="this.value='';" onchange="setDashboard(this.value);">
+							<option value= "None">Choose</option>
+							<option value= "BCREC">BCREC</option>
+							<option value= "Fuljhore">Fuljhore More</option>
+							<option value= "Benachity">Benachity Road</option>
+						</select></h5>
+					</div>
+				</div>
+
+			</div>
+			<!-- ###################################################-->
+            
+			<div id="content" class="tab-content" role="tablist">
+                <!-- tab content 1-->
+                <div id="pane-A" style="display:block">
+                    <!--place content here-->
+					<div class="row">
+				<div class="col-md-4 ">
+					<div class="card mt-5 border-0 bg-transparent">
+						<div class="card-body p-0 text-white">
+							<div class="position-relative p-3 pb-4 cardbg"  style="background-color: #556B2F">
+								<div class="wrapper d-flex">
+									<div class="h5">
+										PM1 : <s1 style="color: black;" ></s1><font style="font-family: 'Lobster', cursive;">(µg/m³)</font>
+									</div>
+								</div>
+								<button class="btn btn-info position-absolute rounded-pill justify-content-center detailbtn1" data-toggle="collapse" data-target="#details1"> 
+									<span class="infoIcon"><i class="fa fa-chevron-down"></i></span>
+									<span class="infoIcon2"><i class="fa fa-chevron-up"></i></span>
+								</button>
+							</div>
+							<div class="collapse" id="details1">
+								<div class="p-1 cardDarkbg" style="background-color: black;">
+									Fine particulate matter (<1.0µm) - Dominant
+								</div>
+								<div class="p-1" style="background-color: grey;">
+									<b style="color:black"> Sources</b></br>
+										Main sources are combustion processes (e.g. power plants, indoor heating, car exhausts, wildfires), 
+										mechanical processes (e.g. construction, mineral dust) and biological particles (e.g. bacteria, viruses).
+
+									</br><b style="color:black">Effects</b></br>
+										Fine particles can penetrate into the lungs and bloodstream. Short term exposure can cause irritation 
+										of the airways, coughing and aggravation of heart and lung diseases, expressed as difficulty breathing, 
+										heart attacks and even premature death.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card mt-5 border-0 bg-transparent">
+						<div class="card-body p-0 text-white">
+							<div class="position-relative p-3 pb-4 cardbg"  style="background-color: #556B2F">
+								<div class="wrapper d-flex">
+									<div class="h5">
+										PM2.5 : <s2 style="color: black;" ></s2><font style="font-family: 'Lobster', cursive;">(µg/m³)</font>
+
+									</div>
+								</div>
+								<button class="btn btn-info position-absolute rounded-pill justify-content-center detailbtn2" data-toggle="collapse" data-target="#details2"> 
+									<span class="infoIcon"><i class="fa fa-chevron-down"></i></span>
+									<span class="infoIcon2"><i class="fa fa-chevron-up"></i></span>
+								</button>
+							</div>
+							<div class="collapse" id="details2">
+								<div class="p-1 cardDarkbg" style="background-color: black;">
+									Fine particulate matter (<2.5µm) - Dominant
+								</div>
+								<div class="p-1" style="background-color: grey;">
+									<b style="color:black"> Sources</b></br>
+										Main sources are combustion processes (e.g. power plants, indoor heating, car exhausts, wildfires), 
+										mechanical processes (e.g. construction, mineral dust) and biological particles (e.g. bacteria, viruses).
+
+									</br><b style="color:black">Effects</b></br>
+										Fine particles can penetrate into the lungs and bloodstream. Short term exposure can cause irritation 
+										of the airways, coughing and aggravation of heart and lung diseases, expressed as difficulty breathing, 
+										heart attacks and even premature death.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card mt-5 border-0 bg-transparent" >
+						<div class="card-body p-0 text-white">
+							<div class="position-relative p-3 pb-4 cardbg"  style="background-color: #556B2F">
+								<div class="wrapper d-flex">
+									<div class="h5">
+										PM10 :<s3 style="color: black;" ></s3><font style="font-family: 'Lobster', cursive;">(µg/m³)</font>
+									</div>
+								</div>
+								<button class="btn btn-info position-absolute rounded-pill justify-content-center detailbtn3" data-toggle="collapse" data-target="#details3"> 
+									<span class="infoIcon"><i class="fa fa-chevron-down"></i></span>
+									<span class="infoIcon2"><i class="fa fa-chevron-up"></i></span>
+								</button>
+							</div>
+							<div class="collapse" id="details3">
+								<div class="p-1 cardDarkbg" style="background-color: black;">
+									Inhalable particulate matter (<10µm)
+								</div>
+								<div class="p-1" style="background-color: grey;">
+									<b style="color:black"> Sources</b></br>
+										Main sources are combustion processes (e.g. indoor heating, wildfires), 
+										mechanical processes (e.g. construction, mineral dust, agriculture) and biological particles (e.g. pollen, bacteria, mold).
+
+									</br><b style="color:black">Effects</b></br>
+										Inhalable particles can penetrate into the lungs. Short term exposure can cause irritation of the airways, 
+										coughing, and aggravation of heart and lung diseases, expressed as difficulty breathing, heart attacks and even premature death.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card mt-5 border-0 bg-transparent">
+						<div class="card-body p-0 text-white">
+							<div class="position-relative p-3 pb-4 cardbg"  style="background-color: #556B2F">
+								<div class="wrapper d-flex">
+									<div class="h5">
+										NO<sub></sub> :<s6 style="color: black;" ></s6><font style="font-family: 'Lobster', cursive;">ppb</font>
+									</div>
+								</div>
+								<button class="btn btn-info position-absolute rounded-pill justify-content-center detailbtn4" data-toggle="collapse" data-target="#details4"> 
+									<span class="infoIcon"><i class="fa fa-chevron-down"></i></span>
+									<span class="infoIcon2"><i class="fa fa-chevron-up"></i></span>
+								</button>
+							</div>
+							<div class="collapse" id="details4">
+								<div class="p-1 cardDarkbg" style="background-color: black;">
+									Nitrogen dioxide
+								</div>
+								<div class="p-1" style="background-color: grey;">
+									<b style="color:black"> Sources</b></br>
+										Main sources are fuel burning processes, such as those used in industry and transportation.
+									</br><b style="color:black">Effects</b></br>
+										Exposure may cause increased bronchial reactivity in patients with asthma, 
+										lung function decline in patients with COPD, and increased risk of respiratory infections, especially in young children.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-4">
+					<div class="card mt-5 border-0 bg-transparent">
+						<div class="card-body p-0 text-white">
+							<div class="position-relative p-3 pb-4 cardbg"  style="background-color: #556B2F">
+								<div class="wrapper d-flex">
+									<div class="h5">
+										H<sub>2</sub> : <s9 style="color: black;" ></s9><font style="font-family: 'Lobster', cursive;">ppb</font>
+									</div>
+								</div>
+								<button class="btn btn-info position-absolute rounded-pill justify-content-center detailbtn9" data-toggle="collapse" data-target="#details9"> 
+									<span class="infoIcon"><i class="fa fa-chevron-down"></i></span>
+									<span class="infoIcon2"><i class="fa fa-chevron-up"></i></span>
+								</button>
+							</div>
+							<div class="collapse" id="details9">
+								<div class="p-1 cardDarkbg" style="background-color: black;">
+									Carbon dioxide
+								</div>
+								<div class="p-1" style="background-color: grey;">
+									<b style="color:black"> Sources</b></br>
+										The main source of carbon dioxide into the atmosphere is from living organisms breathing it out. Similar quantities are absorbed by plants. Other (much smaller) natural sources are forest fires, volcanoes and the burning of fossil fuels (coal, oil and natural gas) for industrial, domestic and transport purposes.
+									</br><b style="color:black">Effects</b></br>
+										When inhaled, carbon monoxide can prevent the blood from carrying oxygen. Exposure may cause dizziness, nausea and headaches. 
+										Exposure to extreme concentrations can lead to loss of consciousness.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card mt-5 border-0 bg-transparent">
+						<div class="card-body p-0 text-white">
+							<div class="position-relative p-3 pb-4 cardbg"  style="background-color: #556B2F">
+								<div class="wrapper d-flex">
+									<div class="h5">
+										CO : <s4 style="color: black;" ></s4><font style="font-family: 'Lobster', cursive;">ppb</font>
+									</div>
+								</div>
+								<button class="btn btn-info position-absolute rounded-pill justify-content-center detailbtn5" data-toggle="collapse" data-target="#details5"> 
+									<span class="infoIcon"><i class="fa fa-chevron-down"></i></span>
+									<span class="infoIcon2"><i class="fa fa-chevron-up"></i></span>
+								</button>
+							</div>
+							<div class="collapse" id="details5">
+								<div class="p-1 cardDarkbg" style="background-color: black;">
+									Carbon monoxide
+								</div>
+								<div class="p-1" style="background-color: grey;">
+									<b style="color:black"> Sources</b></br>
+										Typically originates from incomplete combustion of carbon fuels, such as that which occurs in car engines and power plants.
+									</br><b style="color:black">Effects</b></br>
+										When inhaled, carbon monoxide can prevent the blood from carrying oxygen. Exposure may cause dizziness, nausea and headaches. 
+										Exposure to extreme concentrations can lead to loss of consciousness.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card mt-5 border-0 bg-transparent">
+						<div class="card-body p-0 text-white">
+							<div class="position-relative p-3 pb-4 cardbg"  style="background-color: #556B2F">
+								<div class="wrapper d-flex">
+									<div class="h5">
+										CO<sub>2</sub> : <s5 style="color: black;" ></s5><font style="font-family: 'Lobster', cursive;">ppb</font>
+									</div>
+								</div>
+								<button class="btn btn-info position-absolute rounded-pill justify-content-center detailbtn6" data-toggle="collapse" data-target="#details6"> 
+									<span class="infoIcon"><i class="fa fa-chevron-down"></i></span>
+									<span class="infoIcon2"><i class="fa fa-chevron-up"></i></span>
+								</button>
+							</div>
+							<div class="collapse" id="details6">
+								<div class="p-1 cardDarkbg" style="background-color: black;">
+									Carbon dioxide
+								</div>
+								<div class="p-1" style="background-color: grey;">
+									<b style="color:black"> Sources</b></br>
+										he main source of carbon dioxide into the atmosphere is from living organisms breathing it out. Similar quantities are absorbed by plants. Other (much smaller) natural sources are forest fires, volcanoes and the burning of fossil fuels (coal, oil and natural gas) for industrial, domestic and transport purposes.
+									</br><b style="color:black">Effects</b></br>
+										When inhaled, carbon monoxide can prevent the blood from carrying oxygen. Exposure may cause dizziness, nausea and headaches. 
+										Exposure to extreme concentrations can lead to loss of consciousness.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card mt-5 border-0 bg-transparent">
+						<div class="card-body p-0 text-white">
+							<div class="position-relative p-3 pb-4 cardbg"  style="background-color: #556B2F">
+								<div class="wrapper d-flex">
+									<div class="h5">
+										Temperature : <s7 style="color: black;" ></s7><font style="font-family: 'Lobster', cursive;">&#x2103;</font>
+									</div>
+								</div>
+								<button class="btn btn-info position-absolute rounded-pill justify-content-center detailbtn7" data-toggle="collapse" data-target="#details7"> 
+									<span class="infoIcon"><i class="fa fa-chevron-down"></i></span>
+									<span class="infoIcon2"><i class="fa fa-chevron-up"></i></span>
+								</button>
+							</div>
+							<div class="collapse" id="details7">
+								<div class="p-1 cardDarkbg" style="background-color: black;">
+									Temperature
+								</div>
+								<div class="p-1" style="background-color: grey;">
+									<b style="color:black"> Sources</b></br>
+									Many of our components require the use of JavaScript to function. Specifically, they require jQuery, Popper.js, and our own JavaScript plugins. Place the following s near the end of your pages, right before the closing tag, to enable them. jQuery must come first, then Popper.js, and then our JavaScript plugins.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card mt-5 border-0 bg-transparent">
+						<div class="card-body p-0 text-white">
+							<div class="position-relative p-3 pb-4 cardbg"  style="background-color: #556B2F">
+								<div class="wrapper d-flex">
+									<div class="h5">
+										Humidity: <s8 style="color: black;" ></s8><font style="font-family: 'Lobster', cursive;">%</font>
+									</div>
+								</div>
+								<button class="btn btn-info position-absolute rounded-pill justify-content-center detailbtn8" data-toggle="collapse" data-target="#details8"> 
+									<span class="infoIcon"><i class="fa fa-chevron-down"></i></span>
+									<span class="infoIcon2"><i class="fa fa-chevron-up"></i></span>
+								</button>
+							</div>
+							<div class="collapse" id="details8">
+								<div class="p-1 cardDarkbg" style="background-color: black;">
+									Humidity
+								</div>
+								<div class="p-1" style="background-color: grey;">
+									<b style="color:black"> Sources</b></br>
+									Many of our components require the use of JavaScript to function. Specifically, they require jQuery, Popper.js, and our own JavaScript plugins. Place the following s near the end of your pages, right before the closing tag, to enable them. jQuery must come first, then Popper.js, and then our JavaScript plugins.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+						
+					
+                </div>
+
+
+
+
+                <!-- tab content 2-->
+                <div id="pane-B" style="display:none" >
+                    <!--place content here-->
+					    
+						<div id="map" style="color:black; float:left; height: 400px; width: 50%; "></div>
+						<div id="piechart"style="float: right; display:inline"></div>
+						
+					<!--<div style="height: 400px; width: 400px; border: 5px solid red;"></div>-->
+			
+                </div>
+
+                <!-- tab content 3-->
+                <div id="pane-C" style="display:none" >
+                    <!--place content here-->
+					<div style="height: 600px; width: 600px; border: 5px solid red;"></div>
+                </div>
+            </div>	
+			
+			<!-- ###################################################-->
+			
+		</div>
+		
+		
+	</body>
+	<script>
+	//setDashboard('BCREC');
+	</script>
+	<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZ7HIIjNfnUr_3029iz-adaO0NtQcq9o0 & libraries=geometry &callback=initMap">
+  </script>
+</html>

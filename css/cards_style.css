@@ -1,0 +1,32 @@
+.detailbtn{
+	left:50%;
+	top:100%;
+	transform: translate(-50%,-50%);
+	width:rem(145px);
+	height:rem(38px);
+	z-index: 2;
+	overflow: hidden;
+	transition: all ease 0.35s; 
+}
+button[aria-expanded="true"]{
+		left: 90%;
+		transform: translate(-90%,-50%);
+		width:rem(52px);
+		height:rem(52px);
+
+}
+body{
+	background-color: #111626;
+}
+
+.cardbg{
+	background-color: #eb3b5e;
+}
+
+.cardDarkbg{
+	background-color: #eb3a2e;
+}
+
+.btn.bg{
+	background-color: #f9c900;
+}
